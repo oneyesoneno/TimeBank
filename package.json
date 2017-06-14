@@ -5,15 +5,17 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack -w & nodemon browser/index.jsx "
+    "start": "node_modules/.bin/webpack-dev-server"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-preset-stage-2": "^6.24.1",
+    "material-ui": "^0.18.3",
     "react": "^15.6.0",
     "react-dom": "^15.6.0",
     "react-router": "^4.1.1",
-    "webpack-livereload-plugin": "^0.11.0"
+    "webpack-dev-server": "^2.4.5",
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
