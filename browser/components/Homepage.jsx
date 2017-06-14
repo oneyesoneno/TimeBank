@@ -1,10 +1,12 @@
 import React from 'react'
 import AppBar from 'material-ui/AppBar'
+import FlatButton from 'material-ui/FlatButton';
+import { Link } from 'react-router-dom';
 
 const AppBarExampleIcon = () => (
   <AppBar
     title="I wrote this!1"
-    iconClassNameRight="muidocs-icon-navigation-expand-more"
+    iconElementRight={<Link to="app22"><FlatButton label="DJ Live"/></Link>}
   />
 );
 

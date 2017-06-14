@@ -15,7 +15,9 @@
     "react": "^15.6.0",
     "react-dom": "^15.6.0",
     "react-router": "^4.1.1",
-    "webpack-dev-server": "^2.4.5",
+    "react-router-dom": "^4.1.1",
+    "react-tap-event-plugin": "^2.0.1",
+    "webpack-dev-server": "^2.4.5"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
