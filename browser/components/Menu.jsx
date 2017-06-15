@@ -22,8 +22,8 @@ class Menu extends Component {
 
   handleSlider(event,value){
     console.log(value,'value')
- 
-    this.setState({time: value, text: (value ? ((value * Date.now()/40000/86400).toFixed(2) + ' days from now') : 'Use input or slider')})
+
+    this.setState({time: value, text: (value ? ((value * Date.now()/40000/86400).toFixed(2) + ' days from now') : ' ')})
   }
 
   handleText(event){
