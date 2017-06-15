@@ -1,32 +1,45 @@
 import React, {Component} from 'react';
-import AppBar from 'material-ui/AppBar';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import { Link } from 'react-router-dom';
+import Web3 from 'web3'
+
+import Menu from './Menu'
+import Navbar from './Navbar'
+
+export default class HomeContainer extends Component{
+  constructor(props){
+    super(props)
+  }
+
+  render(){
+
+    return(
+      <div>
+        <Navbar/>
+        <Menu />
+      </div>
+    )
+  }
+}
 
 
-const AppBarExampleIcon = () => (
-  <AppBar
-    title="I wrote this!1"
-    iconElementLeft={<Dropdown/>}
-  />
-);
-
-export default AppBarExampleIcon;
 
 
-const Dropdown = (props) => (
-  <IconMenu
-    {...props}
-    iconButtonElement={
-      <IconButton><MoreVertIcon /></IconButton>
-    }
-    targetOrigin={{horizontal: 'right', vertical: 'top'}}
-    anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-  >
-    <Link to='/app22'><MenuItem primaryText="How To"/></Link>
-    <Link to='/app22'><MenuItem primaryText="About"/></Link>
-  </IconMenu>
-);
+
+window.addEventListener('load', function() {
+
+  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
+  if (typeof web3 !== 'undefined') {
+    // Use Mist/MetaMask's provider
+    window.web3 = new Web3(web3.currentProvider);
+  } else {
+    console.log('No web3? You should consider trying MetaMask!')
+    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
+    window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    setTimeout(function () {
+      console.log(window.web3.eth.blockNumber)
+    },5000)
+  }
+
+  // Now you can start your app & access web3 freely:
+
+
+})

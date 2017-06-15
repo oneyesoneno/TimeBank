@@ -24,13 +24,13 @@ const muiTheme = getMuiTheme({
     primary3Color: grey600,
     accent1Color: '#CC181E',
     accent2Color: '#CC181E',
-    accent3Color: '#CC181E',
-    textColor: fullWhite,
-    secondaryTextColor: fade(fullWhite, 0.7),
-    alternateTextColor: '#303030',
-    canvasColor: '#303030',
+    accent3Color: '#FFFFFF', //affects slider color
+    textColor: '#FFFFFF', //also affects color of icons
+    secondaryTextColor: '#FFFFFF',
+    alternateTextColor: '#FFFFFF', // color of Title text and Button text
+    canvasColor: '#FFFFFF',
     borderColor: fade(fullWhite, 0.3),
-    disabledColor: fade(fullWhite, 0.3),
+    disabledColor: fade('#FFFFFF',0.7), //color of disabled text field, both on field and the floating above
     pickerHeaderColor: fade(fullWhite, 0.12),
     clockCircleColor: fade(fullWhite, 0.12),
   },
