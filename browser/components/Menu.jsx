@@ -196,13 +196,16 @@ class Menu extends Component {
   }
 
   withdrawFunds() {
-    return <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/>
+    return <div>
+      <br/>
+      <br/>
+      <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/></div>
   }
 
   emptyDiv () {
     return <div></div>
   }
-  
+
   render(){
 
     return (
