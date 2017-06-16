@@ -10,6 +10,7 @@ class Menu extends Component {
   constructor(props){
     super(props)
 
+
     this.state = {
       time: null,
       text: 'Use this input or slider',
@@ -71,7 +72,7 @@ class Menu extends Component {
       liveABI : '',
       liveContractAddress: '',
       fundsToDeposit : 0,
-      info: ''
+      info: '',
     }
 
     this.handleSlider = this.handleSlider.bind(this)
@@ -80,6 +81,10 @@ class Menu extends Component {
     this.getInfoClick = this.getInfoClick.bind(this)
     this.depositFundsClick = this.depositFundsClick.bind(this)
     this.withdrawFundsClick = this.withdrawFundsClick.bind(this)
+
+    this.getInfo = this.getInfo.bind(this)
+    this.depositFunds = this.depositFunds.bind(this)
+    this.withdrawFunds = this.withdrawFunds.bind(this)
   }
 
   handleSlider(event,value){
@@ -90,13 +95,10 @@ class Menu extends Component {
   }
 
   handleText(event){
-
     this.setState({text:event.target.value,time:Math.ceil(event.target.value * 86400)})
-
   }
 
   handleETH(event){
-
     this.setState({fundsToDeposit:window.web3.toWei(event.target.value,'ether')})
   }
 
@@ -105,43 +107,34 @@ class Menu extends Component {
     let abi
     let contractAddress
 
-
     if (window.web3.version.network === '3') {
       abi = this.state.ropstenABI
       contractAddress = this.state.ropstenContractAddress
     }
-
     else if (window.web3.version.network === '1') {
       abi = this.state.liveABI
       contractAddress = this.state.liveContractAddress
     }
-
     window.web3.eth.contract(abi).at(contractAddress).getInfo({from:window.web3.eth.accounts[0]},(err,result)=>{this.setState({info:window.web3.fromWei(result,'ether').toFixed(4) + ' ETH'})})
-
   }
 
   depositFundsClick() {
     let abi
     let contractAddress
 
-
     console.log('Time',this.state.time)
     console.log('Wei',this.state.fundsToDeposit)
-
 
     if (window.web3.version.network === '3') {
       abi = this.state.ropstenABI
       contractAddress = this.state.ropstenContractAddress
     }
-
     else if (window.web3.version.network === '1') {
       abi = this.state.liveABI
       contractAddress = this.state.liveContractAddress
     }
-
     window.web3.eth.contract(abi).at(contractAddress).depositFunds(Date.now()/1000 + this.state.time,{from:window.web3.eth.accounts[0],value:this.state.fundsToDeposit},
       (err,result)=>{console.log(result)})
-
 
   }
 
@@ -149,76 +142,77 @@ class Menu extends Component {
     let abi
     let contractAddress
 
-
     console.log('Time',this.state.time)
     console.log('Wei',this.state.fundsToDeposit)
-
 
     if (window.web3.version.network === '3') {
       abi = this.state.ropstenABI
       contractAddress = this.state.ropstenContractAddress
     }
-
     else if (window.web3.version.network === '1') {
       abi = this.state.liveABI
       contractAddress = this.state.liveContractAddress
     }
-
     window.web3.eth.contract(abi).at(contractAddress).withdrawFunds({from:window.web3.eth.accounts[0]},
       (err,result)=>{console.log(result)})
 
   }
 
+  getInfo() {
+    return   <div>
+      <RaisedButton label="Get Info" primary={true} style={{marginRight:5}} onClick={this.getInfoClick} />
+      <TextField
+        disabled={true}
+        hintText="Disabled Hint Text"
+        floatingLabelText="ETH stored and future time"
+        style={{flex:1}}
+        value={" ex: 23.022345 ETH, 1497476174" && this.state.info}
+      />
+    </div>
+  }
+
+  depositFunds() {
+    return        <div>
+      <RaisedButton label="Store ETH" primary={true} style={{marginRight:5}} onClick={this.depositFundsClick} />
+      <TextField
+        hintText={this.state.text || 'Use this input or slider'}
+        value={this.state.text}
+        floatingLabelText="Days to access withdrawal"
+        floatingLabelFixed={true}
+        style={{marginLeft: 5}}
+        onChange={this.handleText}
+        onFocus={() => this.setState({text:' ',time:0})}
+        onBlur={() =>console.log('blurring')}
+      />
+      <TextField
+        hintText="Amount of ETH to store"
+        floatingLabelText="Doesn't include gas cost"
+        floatingLabelFixed={true}
+        style={{marginLeft: 5}}
+        onChange={this.handleETH}
+      />
+      <Slider defaultValue={0.5} sliderStyle={{marginBottom: 10}} onChange={(event, value) => this.handleSlider(event, value)}/>
+    </div>
+  }
+
+  withdrawFunds() {
+    return <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/>
+  }
+
+  emptyDiv () {
+    return <div></div>
+  }
+  
   render(){
 
-    console.log('props',this.props.muiTheme.palette.textColor)
     return (
-      <div className="menu">
+      <div id="insideMenu">
 
-        <div>
-          <RaisedButton label="Get Info" primary={true} style={{marginRight:5}} onClick={this.getInfoClick} />
-          <TextField
-            disabled={true}
-            hintText="Disabled Hint Text"
-            floatingLabelText="ETH stored and future time"
-            style={{flex:1}}
-            value={" ex: 23.022345 ETH, 1497476174" && this.state.info}
-           />
-        </div>
+        {this[(this.props.choice || 'emptyDiv')]()}
 
-        <div style={{}}>
-        <RaisedButton label="Store ETH" primary={true} style={{marginRight:5}} onClick={this.depositFundsClick} />
-        <TextField
-          hintText={this.state.text || 'Use this input or slider'}
-          value={this.state.text}
-          floatingLabelText="Days to access withdrawal"
-          floatingLabelFixed={true}
-          style={{marginLeft: 5}}
-          onChange={this.handleText}
-          onFocus={() => this.setState({text:' ',time:0})}
-          onBlur={() =>console.log('blurring')}
-        />
-          <TextField
-            hintText="Amount of ETH to store"
-            floatingLabelText="Doesn't include gas cost"
-            floatingLabelFixed={true}
-            style={{marginLeft: 5}}
-            onChange={this.handleETH}
-          />
-          <Slider defaultValue={0.5} sliderStyle={{marginBottom: 10}} onChange={(event, value) => this.handleSlider(event, value)}/>
-        </div>
-
-        <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/>
       </div>
     )
   }
 }
 
-const StyledMenu = muiThemeable()(Menu)
-
-export default StyledMenu
-
-//floatingLabelText="Floating Label Text"
-
-//for time inputfield
-// value={(this.state.time && this.state.text) || undefined}
+export default muiThemeable()(Menu)

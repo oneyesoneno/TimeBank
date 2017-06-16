@@ -1,28 +1,26 @@
-body{
+body {
   background-color: #757575;
 }
 
-.menu  {
+
+#belowNav {
   display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  align-items: center;
-  div {
-    align: left;
-    button {
-      display: flex;
-    label {
-    width: 100%}
-    }
-  }
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: left;
+
 }
 
+#insideQualify {
 
+}
 
-//.menuButton {
-//  flex: 1;
-//}
+#insideMenu {
 
-//.menuText {
-//  flex: 3;
-//}
+}
+
+button {
+      span {
+        text-transform: none !important;
+      }
+}

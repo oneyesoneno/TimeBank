@@ -3,11 +3,21 @@ import Web3 from 'web3'
 
 import Menu from './Menu'
 import Navbar from './Navbar'
+import Qualify from './Qualify'
 
 export default class HomeContainer extends Component{
   constructor(props){
     super(props)
 
+    this.state = {
+      option : ''
+    }
+
+    this.revealChoice = this.revealChoice.bind(this)
+  }
+
+  revealChoice(cb) {
+    this.setState({option: cb})
   }
 
 
@@ -33,10 +43,14 @@ export default class HomeContainer extends Component{
 
   render(){
 
-    return(
+    return (
       <div>
         <Navbar/>
-        <Menu />
+        <div id="belowNav">
+          <Qualify id="qualify" choose={this.revealChoice} />
+          <Menu id='menu' choice={this.state.option}/>
+
+        </div>
       </div>
     )
   }

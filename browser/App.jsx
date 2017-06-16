@@ -43,12 +43,10 @@ export default class App extends React.Component{
 
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
-        <div>
         <Switch>
         <Route exact path="/" component={Homepage} />
         <Route path="/app22" component={SomePage} />
         </Switch>
-        </div>
       </MuiThemeProvider>)
 
   }

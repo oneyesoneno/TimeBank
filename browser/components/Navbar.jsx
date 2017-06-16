@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 export default () => (
   <AppBar
-    title="I wrote this!1"
+    title="TimeBank"
     iconElementLeft={<Dropdown/>}
   />
 );
@@ -22,7 +22,6 @@ const Dropdown = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-    <Link to='/app22'><MenuItem primaryText="How To"/></Link>
-    <Link to='/app22'><MenuItem primaryText="About"/></Link>
+    <Link to='/app22'><MenuItem primaryText="FAQ"/></Link>
   </IconMenu>
 );
