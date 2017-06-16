@@ -12,23 +12,161 @@ class Menu extends Component {
 
     this.state = {
       time: null,
-      text: 'Use this input or slider'
-
+      text: 'Use this input or slider',
+      ropstenABI : [
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "getBalance",
+          "outputs": [
+            {
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "payable": false,
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [],
+          "name": "withdrawFunds",
+          "outputs": [],
+          "payable": false,
+          "type": "function"
+        },
+        {
+          "constant": false,
+          "inputs": [
+            {
+              "name": "_withdrawTime",
+              "type": "uint256"
+            }
+          ],
+          "name": "depositFunds",
+          "outputs": [
+            {
+              "name": "_fundsDeposited",
+              "type": "uint256"
+            }
+          ],
+          "payable": true,
+          "type": "function"
+        },
+        {
+          "constant": true,
+          "inputs": [],
+          "name": "getInfo",
+          "outputs": [
+            {
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "payable": false,
+          "type": "function"
+        }
+      ],
+      ropstenContractAddress : '0xb296af79bf8c567ee24055e39d6d0789c9f2e61d',
+      liveABI : '',
+      liveContractAddress: '',
+      fundsToDeposit : 0,
+      info: ''
     }
 
     this.handleSlider = this.handleSlider.bind(this)
     this.handleText = this.handleText.bind(this)
+    this.handleETH = this.handleETH.bind(this)
+    this.getInfoClick = this.getInfoClick.bind(this)
+    this.depositFundsClick = this.depositFundsClick.bind(this)
+    this.withdrawFundsClick = this.withdrawFundsClick.bind(this)
   }
 
   handleSlider(event,value){
     console.log(value,'value')
+    let days = (value * Date.now()/40000/86400).toFixed(2)
 
-    this.setState({time: value, text: (value ? ((value * Date.now()/40000/86400).toFixed(2) + ' days from now') : ' ')})
+    this.setState({time: days * 86400, text: (value ? (days + ' days from now') : ' ')})
   }
 
   handleText(event){
 
-    this.setState({time: Number(event.target.value), text: (event.target.value * Date.now()/40000/86400).toFixed(2) + ' days from now'})
+    this.setState({text:event.target.value,time:Math.ceil(event.target.value * 86400)})
+
+  }
+
+  handleETH(event){
+
+    this.setState({fundsToDeposit:window.web3.toWei(event.target.value,'ether')})
+  }
+
+
+  getInfoClick(){
+    let abi
+    let contractAddress
+
+
+    if (window.web3.version.network === '3') {
+      abi = this.state.ropstenABI
+      contractAddress = this.state.ropstenContractAddress
+    }
+
+    else if (window.web3.version.network === '1') {
+      abi = this.state.liveABI
+      contractAddress = this.state.liveContractAddress
+    }
+
+    window.web3.eth.contract(abi).at(contractAddress).getInfo({from:window.web3.eth.accounts[0]},(err,result)=>{this.setState({info:window.web3.fromWei(result,'ether').toFixed(4) + ' ETH'})})
+
+  }
+
+  depositFundsClick() {
+    let abi
+    let contractAddress
+
+
+    console.log('Time',this.state.time)
+    console.log('Wei',this.state.fundsToDeposit)
+
+
+    if (window.web3.version.network === '3') {
+      abi = this.state.ropstenABI
+      contractAddress = this.state.ropstenContractAddress
+    }
+
+    else if (window.web3.version.network === '1') {
+      abi = this.state.liveABI
+      contractAddress = this.state.liveContractAddress
+    }
+
+    window.web3.eth.contract(abi).at(contractAddress).depositFunds(Date.now()/1000 + this.state.time,{from:window.web3.eth.accounts[0],value:this.state.fundsToDeposit},
+      (err,result)=>{console.log(result)})
+
+
+  }
+
+  withdrawFundsClick(){
+    let abi
+    let contractAddress
+
+
+    console.log('Time',this.state.time)
+    console.log('Wei',this.state.fundsToDeposit)
+
+
+    if (window.web3.version.network === '3') {
+      abi = this.state.ropstenABI
+      contractAddress = this.state.ropstenContractAddress
+    }
+
+    else if (window.web3.version.network === '1') {
+      abi = this.state.liveABI
+      contractAddress = this.state.liveContractAddress
+    }
+
+    window.web3.eth.contract(abi).at(contractAddress).withdrawFunds({from:window.web3.eth.accounts[0]},
+      (err,result)=>{console.log(result)})
+
   }
 
   render(){
@@ -38,24 +176,25 @@ class Menu extends Component {
       <div className="menu">
 
         <div>
-          <RaisedButton label="Get Info" primary={true} style={{marginRight:5}}/>
+          <RaisedButton label="Get Info" primary={true} style={{marginRight:5}} onClick={this.getInfoClick} />
           <TextField
             disabled={true}
             hintText="Disabled Hint Text"
-            defaultValue=" ex: 23.022345 ETH, 1497476174"
             floatingLabelText="ETH stored and future time"
             style={{flex:1}}
+            value={" ex: 23.022345 ETH, 1497476174" && this.state.info}
            />
         </div>
 
         <div style={{}}>
-        <RaisedButton label="Store ETH" primary={true} style={{marginRight:5}}/>
+        <RaisedButton label="Store ETH" primary={true} style={{marginRight:5}} onClick={this.depositFundsClick} />
         <TextField
           hintText={this.state.text || 'Use this input or slider'}
-          value={(this.state.time && this.state.text) || undefined}
+          value={this.state.text}
           floatingLabelText="Days to access withdrawal"
           floatingLabelFixed={true}
           style={{marginLeft: 5}}
+          onChange={this.handleText}
           onFocus={() => this.setState({text:' ',time:0})}
           onBlur={() =>console.log('blurring')}
         />
@@ -64,11 +203,12 @@ class Menu extends Component {
             floatingLabelText="Doesn't include gas cost"
             floatingLabelFixed={true}
             style={{marginLeft: 5}}
+            onChange={this.handleETH}
           />
           <Slider defaultValue={0.5} sliderStyle={{marginBottom: 10}} onChange={(event, value) => this.handleSlider(event, value)}/>
         </div>
 
-        <RaisedButton label="Withdraw Funds" primary={true}/>
+        <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/>
       </div>
     )
   }
@@ -79,3 +219,6 @@ const StyledMenu = muiThemeable()(Menu)
 export default StyledMenu
 
 //floatingLabelText="Floating Label Text"
+
+//for time inputfield
+// value={(this.state.time && this.state.text) || undefined}
