@@ -10,7 +10,9 @@ export default class HomeContainer extends Component{
     super(props)
 
     this.state = {
-      option : ''
+      option : '',
+      version: ''
+
     }
 
     this.revealChoice = this.revealChoice.bind(this)
@@ -22,33 +24,34 @@ export default class HomeContainer extends Component{
 
 
   componentDidMount(){
-    window.addEventListener('load', function() {
+    window.addEventListener('load', () => {
 
       // Checking if Web3 has been injected by the browser (Mist/MetaMask)
       if (typeof web3 !== 'undefined') {
         // Use Mist/MetaMask's provider
         window.web3 = new Web3(web3.currentProvider);
-        console.log('METAMASK')
-        console.log(window.web3.eth.getBlockNumber(function(err,result){console.log(result)}))
+        console.log('Using injected web3')
+        console.log(window.web3.eth.getBlockNumber((err,result) =>{console.log('Latest Block Number:',result,'Error or null:',err)}))
+        this.setState({version:window.web3.version.network})
+
       } else {
         console.log('No injected web3, attempting to connect to local host')
         // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
         window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-        setTimeout(function () {
-          console.log(window.web3.eth.blockNumber)
-        },5000)
+        this.setState({version:window.web3.version.network})
       }
     })
   }
 
   render(){
+console.log('passingdownVersion',this)
 
     return (
       <div>
-        <Navbar/>
+        <Navbar version={this.state.version}/>
         <div id="belowNav">
           <Qualify id="qualify" choose={this.revealChoice} />
-          <Menu id='menu' choice={this.state.option}/>
+          <Menu id='menu' choice={this.state.option} version={this.state.version}/>
 
         </div>
       </div>

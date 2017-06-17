@@ -6,12 +6,6 @@ import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { Link } from 'react-router-dom';
 
-export default () => (
-  <AppBar
-    title="TimeBank"
-    iconElementLeft={<Dropdown/>}
-  />
-);
 
 const Dropdown = (props) => (
   <IconMenu
@@ -22,6 +16,23 @@ const Dropdown = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-    <Link to='/app22'><MenuItem primaryText="FAQ"/></Link>
+    <Link to='/app22'><MenuItem primaryText="FAQ" primary={true} /></Link>
   </IconMenu>
 );
+
+export default (props) => {
+  console.log('Navprops', props)
+
+  let obj = {}
+
+  if (props.version === '3') obj.version =  'Ropsten'
+  else if (props.version === '1') obj.version = 'Mainnet'
+
+  const frozenNetwork = Object.freeze(obj)
+
+return (<AppBar
+  title="TimeBank"
+  iconElementLeft={<Dropdown/>}
+  iconElementRight={<div ><h1 style={{margin: 0, marginTop: 5, fontWeight: 400}}>{frozenNetwork.version || 'No Network Detected'}</h1></div>}
+/>)
+}

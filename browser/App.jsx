@@ -19,11 +19,11 @@ const muiTheme = getMuiTheme({
   fontFamily: 'Roboto, sans-serif',
   borderRadius: 2,
   palette: {
-    primary1Color: cyan700,
-    primary2Color: cyan700,
-    primary3Color: grey600,
-    accent1Color: '#CC181E',
-    accent2Color: '#CC181E',
+    primary1Color: '#39528b',
+    primary2Color: '#39528b',
+    primary3Color: '#FFFFFF',
+    accent1Color: '#39528b',
+    accent2Color: '#39528b',
     accent3Color: '#FFFFFF', //affects slider color
     textColor: '#FFFFFF', //also affects color of icons
     secondaryTextColor: '#FFFFFF',

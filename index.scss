@@ -1,7 +1,6 @@
 body {
-  background-color: #757575;
+  background-color: #1d2f47;
 }
-
 
 #belowNav {
   display: flex;
@@ -12,15 +11,19 @@ body {
 }
 
 #insideQualify {
-  width:35%;
+  width: 20%;
 }
 
 #insideMenu {
-width:65%;
+  width: 65%;
 }
 
 button {
-      span {
-        text-transform: none !important;
-      }
+  span {
+    text-transform: none !important;
+  }
+}
+
+div[role="menu"]{
+  background-color: #39528b;
 }

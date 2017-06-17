@@ -4,6 +4,7 @@ import muiThemeable from 'material-ui/styles/muiThemeable'
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
+import PublicIcon from 'material-ui/svg-icons/social/public'
 
 
 class Menu extends Component {
@@ -73,6 +74,7 @@ class Menu extends Component {
       liveContractAddress: '',
       fundsToDeposit : 0,
       info: '',
+      transaction: ''
     }
 
     this.handleSlider = this.handleSlider.bind(this)
@@ -107,14 +109,15 @@ class Menu extends Component {
     let abi
     let contractAddress
 
-    if (window.web3.version.network === '3') {
+    if (this.props.version === '3') {
       abi = this.state.ropstenABI
       contractAddress = this.state.ropstenContractAddress
     }
-    else if (window.web3.version.network === '1') {
+    else if (this.props.version === '1') {
       abi = this.state.liveABI
       contractAddress = this.state.liveContractAddress
     }
+    console.log('abi',abi)
     window.web3.eth.contract(abi).at(contractAddress).getInfo({from:window.web3.eth.accounts[0]},(err,result)=>{this.setState({info:window.web3.fromWei(result,'ether').toFixed(4) + ' ETH'})})
   }
 
@@ -125,16 +128,19 @@ class Menu extends Component {
     console.log('Time',this.state.time)
     console.log('Wei',this.state.fundsToDeposit)
 
-    if (window.web3.version.network === '3') {
+    if (this.props.version === '3') {
       abi = this.state.ropstenABI
       contractAddress = this.state.ropstenContractAddress
     }
-    else if (window.web3.version.network === '1') {
+    else if (this.props.version === '1') {
       abi = this.state.liveABI
       contractAddress = this.state.liveContractAddress
     }
     window.web3.eth.contract(abi).at(contractAddress).depositFunds(Date.now()/1000 + this.state.time,{from:window.web3.eth.accounts[0],value:this.state.fundsToDeposit},
-      (err,result)=>{console.log(result)})
+      (err,result)=>{
+        if (result) this.setState({transaction:result})
+        else console.log('Error Message:', err)
+    })
 
   }
 
@@ -145,16 +151,19 @@ class Menu extends Component {
     console.log('Time',this.state.time)
     console.log('Wei',this.state.fundsToDeposit)
 
-    if (window.web3.version.network === '3') {
+    if (this.props.version === '3') {
       abi = this.state.ropstenABI
       contractAddress = this.state.ropstenContractAddress
     }
-    else if (window.web3.version.network === '1') {
+    else if (this.props.version === '1') {
       abi = this.state.liveABI
       contractAddress = this.state.liveContractAddress
     }
     window.web3.eth.contract(abi).at(contractAddress).withdrawFunds({from:window.web3.eth.accounts[0]},
-      (err,result)=>{console.log(result)})
+      (err,result)=>{
+        if (result) this.setState({transaction:result})
+        else console.log('Error Message:', err)
+      })
 
   }
 
@@ -182,7 +191,6 @@ class Menu extends Component {
         style={{marginLeft: 5}}
         onChange={this.handleText}
         onFocus={() => this.setState({text:' ',time:0})}
-        onBlur={() =>console.log('blurring')}
       />
       <TextField
         hintText="Amount of ETH to store"
@@ -191,6 +199,9 @@ class Menu extends Component {
         style={{marginLeft: 5}}
         onChange={this.handleETH}
       />
+      {this.state.transaction ? <a href={'https://ropsten.etherscan.io/tx/' + this.state.transaction}><PublicIcon style={{verticalAlign: 'middle', marginLeft:5}}/></a> : <div></div>}
+      {this.state.transaction && this.props.version === '1' ? <a href={'https://etherscan.io/tx/' + this.state.transaction}><PublicIcon style={{verticalAlign: 'middle', marginLeft:5}}/></a> : <div></div>}
+
       <Slider defaultValue={0.5} sliderStyle={{marginBottom: 10}} onChange={(event, value) => this.handleSlider(event, value)}/>
     </div>
   }
@@ -199,7 +210,10 @@ class Menu extends Component {
     return <div>
       <br/>
       <br/>
-      <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/></div>
+      <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/>
+      {this.state.transaction && this.props.version === '3' ? <a href={'https://ropsten.etherscan.io/tx/' + this.state.transaction}><PublicIcon style={{verticalAlign: 'middle', marginLeft:5}}/></a> : <div></div>}
+      {this.state.transaction && this.props.version === '1' ? <a href={'https://etherscan.io/tx/' + this.state.transaction}><PublicIcon style={{verticalAlign: 'middle', marginLeft:5}}/></a> : <div></div>}
+    </div>
   }
 
   emptyDiv () {
@@ -207,6 +221,8 @@ class Menu extends Component {
   }
 
   render(){
+
+    console.log('MenuProps',this.props)
 
     return (
       <div id="insideMenu">
