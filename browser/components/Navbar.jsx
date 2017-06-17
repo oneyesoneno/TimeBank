@@ -21,7 +21,6 @@ const Dropdown = (props) => (
 );
 
 export default (props) => {
-  console.log('Navprops', props)
 
   let obj = {}
 

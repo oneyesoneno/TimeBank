@@ -23,7 +23,7 @@ const muiTheme = getMuiTheme({
     primary2Color: '#39528b',
     primary3Color: '#FFFFFF',
     accent1Color: '#39528b',
-    accent2Color: '#39528b',
+    accent2Color: '#CC181E',
     accent3Color: '#FFFFFF', //affects slider color
     textColor: '#FFFFFF', //also affects color of icons
     secondaryTextColor: '#FFFFFF',

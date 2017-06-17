@@ -74,7 +74,8 @@ class Menu extends Component {
       liveContractAddress: '',
       fundsToDeposit : 0,
       info: '',
-      transaction: ''
+      transaction: '',
+      disabledDeposit:false
     }
 
     this.handleSlider = this.handleSlider.bind(this)
@@ -90,18 +91,19 @@ class Menu extends Component {
   }
 
   handleSlider(event,value){
-    console.log(value,'value')
     let days = (value * Date.now()/40000/86400).toFixed(2)
 
-    this.setState({time: days * 86400, text: (value ? (days + ' days from now') : ' ')})
+    this.setState({time: days * 86400, text: (value ? (days + ' days from now') : ' '),disabledDeposit:false})
   }
 
   handleText(event){
-    this.setState({text:event.target.value,time:Math.ceil(event.target.value * 86400)})
+    let num = Number((event.target.value.trim()).split(' ')[0])
+
+    this.setState({text:event.target.value,time:Math.ceil(num * 86400), disabledDeposit:!(typeof num === 'number' && num > 0)})
   }
 
   handleETH(event){
-    this.setState({fundsToDeposit:window.web3.toWei(event.target.value,'ether')})
+    this.setState({fundsToDeposit:window.web3.toWei(Number(event.target.value),'ether'),disabledDeposit:!(event.target.value > 0)})
   }
 
 
@@ -182,7 +184,7 @@ class Menu extends Component {
 
   depositFunds() {
     return        <div>
-      <RaisedButton label="Store ETH" primary={true} style={{marginRight:5}} onClick={this.depositFundsClick} />
+      <RaisedButton label="Store ETH" primary={true} disabled={this.state.disabledDeposit} style={{marginRight:5}} onClick={this.depositFundsClick} />
       <TextField
         hintText={this.state.text || 'Use this input or slider'}
         value={this.state.text}
@@ -221,8 +223,6 @@ class Menu extends Component {
   }
 
   render(){
-
-    console.log('MenuProps',this.props)
 
     return (
       <div id="insideMenu">
