@@ -42,7 +42,8 @@ class Menu extends Component {
       liveContractAddress: '',
       fundsToDeposit: 0,
       info: '',
-      transaction: '',
+      depositTransaction: '',
+      withdrawTransaction:'',
       disabledDeposit: false
     }
 
@@ -118,7 +119,7 @@ class Menu extends Component {
     }
     window.web3.eth.contract(abi).at(contractAddress).depositFunds(Date.now()/1000 + this.state.time,{from:window.web3.eth.accounts[0],value:this.state.fundsToDeposit},
       (err,result)=>{
-        if (result) this.setState({transaction:result})
+        if (result) this.setState({depositTransaction:result})
         else console.log('Error Message:', err)
     })
 
@@ -139,7 +140,7 @@ class Menu extends Component {
     }
     window.web3.eth.contract(abi).at(contractAddress).withdrawFunds({from:window.web3.eth.accounts[0]},
       (err,result)=>{
-        if (result) this.setState({transaction:result})
+        if (result) this.setState({withdrawTransaction:result})
         else console.log('Error Message:', err)
       })
 
@@ -178,13 +179,13 @@ class Menu extends Component {
         style={{marginLeft: 5}}
         onChange={this.handleETH}
       />
-      {this.state.transaction ? <a href={'https://ropsten.etherscan.io/tx/' + this.state.transaction}><PublicIcon
+      {this.state.depositTransaction ? <a href={'https://ropsten.etherscan.io/tx/' + this.state.depositTransaction}><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
-      {this.state.transaction && this.props.version === '1' ?
-        <a href={'https://etherscan.io/tx/' + this.state.transaction}><PublicIcon
+      {this.state.depositTransaction && this.props.version === '1' ?
+        <a href={'https://etherscan.io/tx/' + this.state.depositTransaction}><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
 
-      <Slider defaultValue={0.5} step={0.005} sliderStyle={{marginBottom: 10}}
+      <Slider defaultValue={0.5} step={0.0000625} sliderStyle={{marginBottom: 10}}
               onChange={(event, value) => this.handleSlider(event, value)}/>
     </div>
   }
@@ -194,11 +195,11 @@ class Menu extends Component {
       <br/>
       <br/>
       <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/>
-      {this.state.transaction && this.props.version === '3' ?
-        <a href={'https://ropsten.etherscan.io/tx/' + this.state.transaction}><PublicIcon
+      {this.state.withdrawTransaction && this.props.version === '3' ?
+        <a href={'https://ropsten.etherscan.io/tx/' + this.state.withdrawTransaction}><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
-      {this.state.transaction && this.props.version === '1' ?
-        <a href={'https://etherscan.io/tx/' + this.state.transaction}><PublicIcon
+      {this.state.withdrawTransaction && this.props.version === '1' ?
+        <a href={'https://etherscan.io/tx/' + this.state.withdrawTransaction}><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
     </div>
   }
