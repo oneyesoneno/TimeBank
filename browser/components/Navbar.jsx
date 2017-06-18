@@ -16,7 +16,7 @@ const Dropdown = (props) => (
     targetOrigin={{horizontal: 'right', vertical: 'top'}}
     anchorOrigin={{horizontal: 'right', vertical: 'top'}}
   >
-    <Link to='/app22'><MenuItem primaryText="FAQ" primary={true} /></Link>
+    <Link to='/app22'><MenuItem primaryText="FAQ" /></Link>
   </IconMenu>
 );
 

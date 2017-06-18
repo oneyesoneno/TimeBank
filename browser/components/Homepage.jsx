@@ -44,7 +44,6 @@ export default class HomeContainer extends Component{
   }
 
   render(){
-console.log('passingdownVersion',this)
 
     return (
       <div>
