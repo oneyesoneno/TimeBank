@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import Slider from 'material-ui/Slider';
 import PublicIcon from 'material-ui/svg-icons/social/public'
+import Snackbar from 'material-ui/Snackbar';
 
 
 class Menu extends Component {
@@ -15,6 +16,7 @@ class Menu extends Component {
     this.state = {
       time: null,
       text: 'Use this input or slider',
+      snackOpen: false,
       ropstenABI: [{
         "constant": false,
         "inputs": [],
@@ -53,6 +55,7 @@ class Menu extends Component {
     this.getInfoClick = this.getInfoClick.bind(this)
     this.depositFundsClick = this.depositFundsClick.bind(this)
     this.withdrawFundsClick = this.withdrawFundsClick.bind(this)
+    this.handleRequestClose = this.handleRequestClose.bind(this)
 
     this.getInfo = this.getInfo.bind(this)
     this.depositFunds = this.depositFunds.bind(this)
@@ -119,7 +122,7 @@ class Menu extends Component {
     }
     window.web3.eth.contract(abi).at(contractAddress).depositFunds(Date.now()/1000 + this.state.time,{from:window.web3.eth.accounts[0],value:this.state.fundsToDeposit},
       (err,result)=>{
-        if (result) this.setState({depositTransaction:result})
+        if (result) this.setState({depositTransaction:result, snackOpen:true})
         else console.log('Error Message:', err)
     })
 
@@ -140,7 +143,7 @@ class Menu extends Component {
     }
     window.web3.eth.contract(abi).at(contractAddress).withdrawFunds({from:window.web3.eth.accounts[0]},
       (err,result)=>{
-        if (result) this.setState({withdrawTransaction:result})
+        if (result) this.setState({withdrawTransaction:result,snackOpen:true})
         else console.log('Error Message:', err)
       })
 
@@ -179,10 +182,10 @@ class Menu extends Component {
         style={{marginLeft: 5}}
         onChange={this.handleETH}
       />
-      {this.state.depositTransaction ? <a href={'https://ropsten.etherscan.io/tx/' + this.state.depositTransaction}><PublicIcon
+      {this.state.depositTransaction ? <a href={'https://ropsten.etherscan.io/tx/' + this.state.depositTransaction } target="_blank"><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
       {this.state.depositTransaction && this.props.version === '1' ?
-        <a href={'https://etherscan.io/tx/' + this.state.depositTransaction}><PublicIcon
+        <a href={'https://etherscan.io/tx/' + this.state.depositTransaction} target="_blank"><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
 
       <Slider defaultValue={0.5} step={0.0000625} sliderStyle={{marginBottom: 10}}
@@ -195,12 +198,15 @@ class Menu extends Component {
       <br/>
       <br/>
       <RaisedButton label="Withdraw Funds" primary={true} onClick={this.withdrawFundsClick}/>
+
       {this.state.withdrawTransaction && this.props.version === '3' ?
-        <a href={'https://ropsten.etherscan.io/tx/' + this.state.withdrawTransaction}><PublicIcon
+        <a href={'https://ropsten.etherscan.io/tx/' + this.state.withdrawTransaction} target="_blank"><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
+
       {this.state.withdrawTransaction && this.props.version === '1' ?
-        <a href={'https://etherscan.io/tx/' + this.state.withdrawTransaction}><PublicIcon
+        <a href={'https://etherscan.io/tx/' + this.state.withdrawTransaction} target="_blank"><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
+
     </div>
   }
 
@@ -208,13 +214,25 @@ class Menu extends Component {
     return <div></div>
   }
 
+  handleRequestClose(){
+    this.setState({
+      snackOpen: false,
+    });
+  };
+
   render() {
 
     return (
       <div id="insideMenu">
 
         {this[(this.props.choice || 'emptyDiv')]()}
-
+        <Snackbar
+          open={this.state.snackOpen}
+          message="New transaction generated! See Globe for details."
+          autoHideDuration={4000}
+          onRequestClose={this.handleRequestClose}
+          bodyStyle={{backgroundColor:'#3b4095'}}
+        />
       </div>
     )
   }
