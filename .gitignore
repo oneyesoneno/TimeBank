@@ -3,3 +3,5 @@
 .idea
 node_modules
 /bundle.js.map
+/public/bundle.js
+/public/bundle.js.map
