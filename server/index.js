@@ -3,7 +3,7 @@ const path = require('path')
 const express = require('express')
 const volleyball = require('volleyball')
 const bodyParser = require('body-parser')
-
+app.set('port', (process.env.PORT || 3000))
 
 const app = express()
 app.use(volleyball)
@@ -24,4 +24,4 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500).send(err.message || 'Internal server error.');
 });
 
-app.listen(3000, function() {console.log('We are zooming!')})
+app.listen(app.get('port'), function() {console.log('We are zooming!')})
