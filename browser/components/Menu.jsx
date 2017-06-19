@@ -40,8 +40,8 @@ class Menu extends Component {
         "type": "function"
       }],
       ropstenContractAddress: '0xCf9F3f8F8B5bf5Ed72bD3Fdb66c29E36675c9D2b',
-      liveABI: '',
-      liveContractAddress: '',
+      liveABI: [{"constant":false,"inputs":[],"name":"withdrawFunds","outputs":[],"payable":false,"type":"function"},{"constant":false,"inputs":[{"name":"_withdrawTime","type":"uint256"}],"name":"depositFunds","outputs":[{"name":"_fundsDeposited","type":"uint256"}],"payable":true,"type":"function"},{"constant":true,"inputs":[],"name":"getInfo","outputs":[{"name":"","type":"uint256"},{"name":"","type":"uint256"},{"name":"","type":"uint256"}],"payable":false,"type":"function"}],
+      liveContractAddress: '0x459F90b6e8dc23bBF1fF4c2F22aa2149b4bd4CFf',
       fundsToDeposit: 0,
       info: '',
       depositTransaction: '',
@@ -99,9 +99,12 @@ class Menu extends Component {
       contractAddress = this.state.liveContractAddress
     }
     window.web3.eth.contract(abi).at(contractAddress).getInfo({from: window.web3.eth.accounts[0]}, (err, result) => {
-      result = result.toString().split(',')
-      console.log(Number(result[0]))
-      this.setState({info: Number(window.web3.fromWei((result[0]), 'ether')).toFixed(4) + ' ETH, ' + ((result[1]-(Date.now()/1000))/86400).toFixed(2) + ' days from now'})
+      var result = result.toString().split(',')
+      var futureDays
+      if (!Number(result[1])) futureDays = 0
+      else futureDays = ((result[1]-(Date.now()/1000))/86400).toFixed(2)
+
+      this.setState({info: Number(window.web3.fromWei((result[0]), 'ether')).toFixed(4) + ' ETH, ' + futureDays + ' days from now'})
     })
   }
 
@@ -182,7 +185,7 @@ class Menu extends Component {
         style={{marginLeft: 5}}
         onChange={this.handleETH}
       />
-      {this.state.depositTransaction ? <a href={'https://ropsten.etherscan.io/tx/' + this.state.depositTransaction } target="_blank"><PublicIcon
+      {this.state.depositTransaction && this.props.version === '3'? <a href={'https://ropsten.etherscan.io/tx/' + this.state.depositTransaction } target="_blank"><PublicIcon
           style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
       {this.state.depositTransaction && this.props.version === '1' ?
         <a href={'https://etherscan.io/tx/' + this.state.depositTransaction} target="_blank"><PublicIcon
@@ -201,11 +204,11 @@ class Menu extends Component {
 
       {this.state.withdrawTransaction && this.props.version === '3' ?
         <a href={'https://ropsten.etherscan.io/tx/' + this.state.withdrawTransaction} target="_blank"><PublicIcon
-          style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
+          style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div style={{position:'absolute'}}></div>}
 
       {this.state.withdrawTransaction && this.props.version === '1' ?
         <a href={'https://etherscan.io/tx/' + this.state.withdrawTransaction} target="_blank"><PublicIcon
-          style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div></div>}
+          style={{verticalAlign: 'middle', marginLeft: 5}}/></a> : <div style={{position:'absolute'}}></div>}
 
     </div>
   }
@@ -229,7 +232,7 @@ class Menu extends Component {
         <Snackbar
           open={this.state.snackOpen}
           message="New transaction generated! See Globe for details."
-          autoHideDuration={4000}
+          autoHideDuration={7000}
           onRequestClose={this.handleRequestClose}
           bodyStyle={{backgroundColor:'#3b4095'}}
         />

@@ -13,12 +13,12 @@ const FAQ = (props) => {
       homepage if it says 'No Networks Detected'.</p>
     <p>If you don't have Injected Web3 like Metamask, then it will attempt to connect to a local node running on
       localhost:8545</p>
-    <p>The app works on both Ropsten & Mainnet, so you can test it out on Ropsten before you use real ETH.</p>
+      <p>The app works on both Ropsten & Mainnet, so you can test it out on Ropsten before you use real ETH.</p>
 
-    <p>And of course this website is only providing a friendly UI for interacting with the smart contract, you can always transact with the smart contract directly.</p>
+    <p>And of course this website component is only providing a friendly UI for interacting with the smart contract, you can always transact with the smart contract directly.</p>
 
     <h4 className="FAQ">Where is the contract?</h4>
-    <p>Here are both versions verified on Etherscan and Ropsten Etherscan.</p>
+      <p>Here are both versions verified on <a href="https://etherscan.io/address/0x459f90b6e8dc23bbf1ff4c2f22aa2149b4bd4cff">Etherscan</a> and <a href="https://ropsten.etherscan.io/address/0xcf9f3f8f8b5bf5ed72bd3fdb66c29e36675c9d2b" target="_blank">Ropsten Etherscan</a>.</p>
 
     <h4 className="FAQ">Anything else I should know?</h4>
     <p>Not a need to know, but you can deposit multiple times to the smart contract and it will update the stored balance but
