@@ -5,20 +5,22 @@
   "main": "webpack.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node_modules/.bin/webpack-dev-server"
+    "start": "webpack -w & nodemon server/index.js "
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "babel-preset-stage-2": "^6.24.1",
+    "express": "^4.15.3",
     "material-ui": "^0.18.3",
+    "nodemon": "^1.11.0",
     "react": "^15.6.0",
     "react-dom": "^15.6.0",
     "react-router": "^4.1.1",
     "react-router-dom": "^4.1.1",
     "react-tap-event-plugin": "^2.0.1",
-    "web3": "^0.19.0",
-    "webpack-dev-server": "^2.4.5"
+    "volleyball": "^1.4.1",
+    "web3": "^0.19.0"
   },
   "devDependencies": {
     "babel-core": "^6.25.0",
