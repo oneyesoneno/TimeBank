@@ -3,9 +3,10 @@ const path = require('path')
 const express = require('express')
 const volleyball = require('volleyball')
 const bodyParser = require('body-parser')
-app.set('port', (process.env.PORT || 3000))
 
 const app = express()
+app.set('port', (process.env.PORT || 3000))
+
 app.use(volleyball)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())

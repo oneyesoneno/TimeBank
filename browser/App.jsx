@@ -4,7 +4,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import { Route , Switch} from 'react-router'
 
 import Homepage from './components/Homepage'
-import SomePage from './components/SomePage'
+import FAQ from './components/FAQ'
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 
@@ -45,7 +45,7 @@ export default class App extends React.Component{
       <MuiThemeProvider muiTheme={getMuiTheme(muiTheme)}>
         <Switch>
         <Route exact path="/" component={Homepage} />
-        <Route path="/app22" component={SomePage} />
+        <Route path="/FAQ" component={FAQ} />
         </Switch>
       </MuiThemeProvider>)
 
