@@ -15,12 +15,12 @@ class Qualify extends Component {
       <div id="insideQualify">
         <br/>
         <br />
-        <RaisedButton label="Check on my current deposit" primary={true} onClick={() =>this.props.choose('getInfo')}/>
+        <RaisedButton label="Get info on current deposit" className='qualifyButton' primary={true} onClick={() =>this.props.choose('getInfo')}/>
         <br/>
         <br/>
-        <RaisedButton label="Deposit ETH for a fixed time" primary={true} onClick={() =>this.props.choose('depositFunds')}/><br/>
+        <RaisedButton label="Deposit ETH for a fixed time" className='qualifyButton' primary={true} onClick={() =>this.props.choose('depositFunds')}/><br/>
         <br/>
-        <RaisedButton label="Withdraw my ETH right now" primary={true} onClick={() =>this.props.choose('withdrawFunds')}/>
+        <RaisedButton label="Withdraw ETH" className='qualifyButton' primary={true} onClick={() =>this.props.choose('withdrawFunds')}/>
       </div>
     )
   }
